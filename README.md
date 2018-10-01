@@ -1,2 +1,2 @@
 # AndroidLaba1_2
-! [] (20181001_133901_edited-giphy.gif)
+![](https://github.com/dmitriykotov333/AndroidLaba1_2/preview1.gif)
