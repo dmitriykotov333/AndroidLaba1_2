@@ -1,2 +1,2 @@
 # AndroidLaba1_2
-! [] (Имя-giphy.gif)
+! [] (20181001_133631_edited-giphy.gif)
