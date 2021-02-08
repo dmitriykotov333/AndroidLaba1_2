@@ -3,11 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity">
+    tools:context=".ui.activity.MainActivity">
     <item
         android:id="@+id/action_add"
         android:orderInCategory="200"
-        android:title="Add application"
+        android:title="Add"
+        android:visible="true"
         android:icon="@drawable/ic_add_black_24dp"
         app:showAsAction="ifRoom"/>
 </menu>

@@ -5,9 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ActivityAdd">
     <item
-        android:id="@+id/action_addd"
+        android:id="@+id/action_save"
         android:orderInCategory="200"
-        android:title="Add application"
+        android:title="Save"
         android:icon="@drawable/ic_done_black_24dp"
         app:showAsAction="ifRoom"/>
 </menu>

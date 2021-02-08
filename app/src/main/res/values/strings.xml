@@ -3,4 +3,9 @@
     <string name="name">Введите ФИO</string>
     <string name="desc">Введите тему заявления</string>
     <string name="comments">Введите комментарий заявления</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="posts">Posts</string>
+    <string name="accounts">Accounts</string>
+    <string name="published_publications">Counted published publications equals</string>
 </resources>
