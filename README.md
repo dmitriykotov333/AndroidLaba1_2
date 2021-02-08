@@ -12,7 +12,7 @@
 - Jetpack Navigation Component
 - Motion Layout
 
-![preview1](https://github.com/dmitriykotov333/AndroidLaba1_2/blob/master/promo.gif)
+![preview1](https://github.com/dmitriykotov333/AndroidLaba1_2/blob/master/promo.gif){:height="40%" width="40%"}
 
 - Dagger
 - MVP Architecture
