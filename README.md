@@ -6,6 +6,7 @@ Simple app, example post app.
 
 - RxJava
 > Database operations are synchronous and should not be performed on the UI thread.
+
 > In the case of Query operations, we can make them asynchronous using RxJava. In the case of insert / update / delete, we'll wrap these methods in asynchronous RxJava.
 
 - Jetpack Navigation Component
