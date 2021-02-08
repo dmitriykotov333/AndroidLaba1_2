@@ -1,6 +1,9 @@
 Simple app, example post app.
 
 - Room
+- #### one-to-many
+> A record in one table can be linked to many records in another table, but each record in the latter can only be linked to one record in the first.
+
 - RxJava
 - Jetpack Navigation Component
 - Motion Layout
