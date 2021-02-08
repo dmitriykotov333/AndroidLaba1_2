@@ -5,6 +5,9 @@ Simple app, example post app.
 > A record in one table can be linked to many records in another table, but each record in the latter can only be linked to one record in the first.
 
 - RxJava
+> Database operations are synchronous and should not be performed on the UI thread.
+> In the case of Query operations, we can make them asynchronous using RxJava. In the case of insert / update / delete, we'll wrap these methods in asynchronous RxJava.
+
 - Jetpack Navigation Component
 - Motion Layout
 
