@@ -12,10 +12,10 @@
 - Jetpack Navigation Component
 - Motion Layout
 
-<img src="https://github.com/dmitriykotov333/AndroidLaba1_2/blob/master/promo.gif" width="40%" height="40%"/>
+<img src="https://github.com/dmitriykotov333/AndroidLaba1_2/blob/master/promo.gif" width="45%" height="45%"/>
 
 - Dagger
 - MVP Architecture
 
-<img src="https://github.com/dmitriykotov333/Posts-Room-RxJava/blob/master/img1.PNG" width="35%" height="35%"><img src="https://github.com/dmitriykotov333/Posts-Room-RxJava/blob/master/img2.PNG" width="35%" height="35%"/>
+<img src="https://github.com/dmitriykotov333/Posts-Room-RxJava/blob/master/img1.PNG" width="40%" height="40%"><img src="https://github.com/dmitriykotov333/Posts-Room-RxJava/blob/master/img2.PNG" width="40%" height="40%"/>
 
