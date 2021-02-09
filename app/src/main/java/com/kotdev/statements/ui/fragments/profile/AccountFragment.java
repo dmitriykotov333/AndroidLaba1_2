@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 import com.kotdev.statements.R;
 import com.kotdev.statements.app.presenters.PresenterAccounts;
 import com.kotdev.statements.app.views.ContractAccounts;
+import com.kotdev.statements.databinding.FragmentAccountBinding;
+import com.kotdev.statements.databinding.FragmentFirstBinding;
 import com.kotdev.statements.interfaces.CallbackDelete;
 import com.kotdev.statements.interfaces.ClickListener;
 import com.kotdev.statements.interfaces.GlobalActionInterface;
@@ -36,13 +38,12 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 public class AccountFragment extends DaggerFragment implements ContractAccounts.ViewContractAccounts,
         CallbackDelete<Account>, ClickListener<Account>, GlobalActionInterface<AccountView> {
 
-    @BindView(R.id.rv_account)
-    RecyclerView recyclerView;
 
     @Inject
     PresenterAccounts presenter;
 
     private final CompositeDisposable disposable = new CompositeDisposable();
+    private FragmentAccountBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,7 +70,6 @@ public class AccountFragment extends DaggerFragment implements ContractAccounts.
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
         presenter.attachView(this);
         initAdapter();
     }
@@ -77,20 +77,21 @@ public class AccountFragment extends DaggerFragment implements ContractAccounts.
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_account, container, false);
+        binding = FragmentAccountBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     private void initAdapter() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(20);
-        recyclerView.setDrawingCacheEnabled(true);
-        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        binding.rvAccount.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.rvAccount.setHasFixedSize(true);
+        binding.rvAccount.setItemViewCacheSize(20);
+        binding.rvAccount.setDrawingCacheEnabled(true);
+        binding.rvAccount.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         presenter.setAdapter(new AdapterAccounts());
         disposable.add(presenter.getAccounts().subscribe(accounts -> presenter.getAdapter().setAccounts(accounts)));
         disposable.add(presenter.getAccountsView().subscribe(accounts -> {
             presenter.getAdapter().setAccountsView(accounts);
-            recyclerView.setAdapter(presenter.getAdapter());
+            binding.rvAccount.setAdapter(presenter.getAdapter());
             presenter.getAdapter().setCallbackSize(id -> presenter.getSize(id));
         }));
         presenter.getAdapter().setCallbackDelete(this);
@@ -118,4 +119,9 @@ public class AccountFragment extends DaggerFragment implements ContractAccounts.
         Navigation.findNavController(requireView()).navigate(R.id.action_global_globalAccountFragment, bundle);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 }

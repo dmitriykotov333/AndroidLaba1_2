@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 
 import com.kotdev.statements.app.presenters.PresenterPosts;
 import com.kotdev.statements.app.views.ContractPosts;
+import com.kotdev.statements.databinding.FragmentFirstBinding;
+import com.kotdev.statements.databinding.FragmentSecondBinding;
 import com.kotdev.statements.interfaces.CallbackDelete;
 import com.kotdev.statements.interfaces.GlobalActionInterface;
 import com.kotdev.statements.room.post.Post;
@@ -34,13 +36,11 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class FirstFragment extends DaggerFragment implements ContractPosts.ViewContractPosts, CallbackDelete<Post>, GlobalActionInterface<PostAccount> {
 
-    @BindView(R.id.rv)
-    RecyclerView recyclerView;
-
     @Inject
     PresenterPosts presenter;
 
     private final CompositeDisposable disposable = new CompositeDisposable();
+    private FragmentFirstBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +51,7 @@ public class FirstFragment extends DaggerFragment implements ContractPosts.ViewC
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        binding = null;
     }
 
 
@@ -74,7 +75,6 @@ public class FirstFragment extends DaggerFragment implements ContractPosts.ViewC
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
         presenter.attachView(this);
         initAdapter();
     }
@@ -82,19 +82,20 @@ public class FirstFragment extends DaggerFragment implements ContractPosts.ViewC
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_first, container, false);
+        binding = FragmentFirstBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     private void initAdapter() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(20);
-        recyclerView.setDrawingCacheEnabled(true);
-        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        binding.rv.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.rv.setHasFixedSize(true);
+        binding.rv.setItemViewCacheSize(20);
+        binding.rv.setDrawingCacheEnabled(true);
+        binding.rv.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         presenter.setAdapter(new Adapter());
         disposable.add(presenter.getPostAccount().subscribe(posts -> {
             presenter.getAdapter().setPostAccount(posts);
-            recyclerView.setAdapter(presenter.getAdapter());
+            binding.rv.setAdapter(presenter.getAdapter());
         }));
         disposable.add(presenter.getPosts().subscribe(posts -> presenter.getAdapter().setPosts(posts)));
         presenter.getAdapter().setCallbackDelete(this);

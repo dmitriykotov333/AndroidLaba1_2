@@ -16,6 +16,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 import com.kotdev.statements.R;
+import com.kotdev.statements.databinding.ActivityMainBinding;
 import com.kotdev.statements.ui.fragments.posts.FirstFragmentDirections;
 import com.kotdev.statements.ui.fragments.profile.AccountFragmentDirections;
 
@@ -33,30 +34,30 @@ import dagger.android.support.DaggerAppCompatActivity;
  */
 public class MainActivity extends DaggerAppCompatActivity {
 
-    @BindView(R.id.drawer_layout)
+    /*@BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
     @BindView(R.id.nav_view)
     NavigationView navigationView;
-
+*/
     private NavController navController;
-
+    private ActivityMainBinding binding;
     private AppBarConfiguration appBarConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         check(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        setSupportActionBar(findViewById(R.id.toolbar));
+        setSupportActionBar(binding.toolbar);
 
-        appBarConfig = new AppBarConfiguration.Builder(navigationView.getMenu())
-                .setOpenableLayout(drawerLayout)
+        appBarConfig = new AppBarConfiguration.Builder(binding.navView.getMenu())
+                .setOpenableLayout(binding.drawerLayout)
                 .build();
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfig);
-        NavigationUI.setupWithNavController(navigationView, navController);
+        NavigationUI.setupWithNavController(binding.navView, navController);
     }
 
 
@@ -68,8 +69,8 @@ public class MainActivity extends DaggerAppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }

@@ -20,6 +20,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.kotdev.statements.R;
 import com.kotdev.statements.app.presenters.PresenterCreatePost;
 import com.kotdev.statements.app.views.ContractPosts;
+import com.kotdev.statements.databinding.FragmentCreateAccountBinding;
 import com.kotdev.statements.room.post.Post;
 
 import javax.inject.Inject;
@@ -29,20 +30,15 @@ import butterknife.ButterKnife;
 import dagger.android.support.DaggerFragment;
 import io.reactivex.rxjava3.disposables.Disposable;
 
-public class SecondFragment extends DaggerFragment implements ContractPosts.ViewContractPosts {
+import com.kotdev.statements.databinding.FragmentSecondBinding;
 
-    @BindView(R.id.name)
-    EditText id_account;
-    @BindView(R.id.desc)
-    EditText theme;
-    @BindView(R.id.comments)
-    EditText comments;
-    @BindView(R.id.editTitle)
-    EditText title;
+public class SecondFragment extends DaggerFragment implements ContractPosts.ViewContractPosts {
 
     @Inject
     PresenterCreatePost presenter;
 
+    private FragmentSecondBinding binding;
+    private Disposable disposable;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,14 +47,11 @@ public class SecondFragment extends DaggerFragment implements ContractPosts.View
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Log.d("CreateAccountFragment", "onViewCreated: CreateAccountFragment was created");
-        ButterKnife.bind(this, view);
         presenter.attachView(this);
-
         SecondFragmentArgs args = SecondFragmentArgs.fromBundle(getArguments());
-        title.setText(args.getName());
-        theme.setText(args.getTheme());
-        comments.setText(args.getComment());
+        binding.editTitle.setText(args.getName());
+        binding.desc.setText(args.getTheme());
+        binding.comments.setText(args.getComment());
     }
 
     @Override
@@ -72,17 +65,17 @@ public class SecondFragment extends DaggerFragment implements ContractPosts.View
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_add) {
 
-            if (!TextUtils.isEmpty(id_account.getText().toString())) {
+            if (!TextUtils.isEmpty(binding.name.getText().toString())) {
 
-                Disposable disposable = presenter.getIdAccounts()
+                disposable = presenter.getIdAccounts()
                         .subscribe(longs -> {
                             for (Long id : longs) {
-                                if (Long.parseLong(id_account.getText().toString()) == id) {
+                                if (Long.parseLong(binding.name.getText().toString()) == id) {
                                     Post post = new Post();
-                                    post.title = title.getText().toString();
-                                    post.accountId = Long.parseLong(id_account.getText().toString());
-                                    post.theme = theme.getText().toString();
-                                    post.comment = comments.getText().toString();
+                                    post.title = binding.editTitle.getText().toString();
+                                    post.accountId = Long.parseLong(binding.name.getText().toString());
+                                    post.theme = binding.desc.getText().toString();
+                                    post.comment = binding.comments.getText().toString();
                                     presenter.addPosts(post);
                                     Navigation.findNavController(requireView())
                                             .navigate(SecondFragmentDirections.actionSecondFragmentToNavPosts());
@@ -106,7 +99,15 @@ public class SecondFragment extends DaggerFragment implements ContractPosts.View
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_second, container, false);
+        binding = FragmentSecondBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+        disposable.dispose();
     }
 
     @Override

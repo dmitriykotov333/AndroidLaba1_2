@@ -29,6 +29,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.snackbar.Snackbar;
 import com.kotdev.statements.app.presenters.PresenterAccountActions;
 import com.kotdev.statements.app.views.ContractAccounts;
+import com.kotdev.statements.databinding.ActivityMainBinding;
 import com.kotdev.statements.room.profile.Account;
 import com.kotdev.statements.R;
 
@@ -40,21 +41,14 @@ import dagger.android.support.DaggerFragment;
 import io.reactivex.rxjava3.disposables.Disposable;
 
 import static com.kotdev.statements.helpers.Generate.generateId;
+import com.kotdev.statements.databinding.FragmentCreateAccountBinding;
 
 public class CreateAccountFragment extends DaggerFragment implements ContractAccounts.ViewContractAccounts {
-
-    @BindView(R.id.id)
-    TextView id;
-    @BindView(R.id.first_name)
-    EditText first_name;
-    @BindView(R.id.last_name)
-    EditText last_name;
-    @BindView(R.id.icon_account)
-    ImageView icon;
 
     @Inject
     PresenterAccountActions presenter;
 
+    private FragmentCreateAccountBinding binding;
     private Disposable compositeDisposable;
     private Uri uri;
 
@@ -66,34 +60,33 @@ public class CreateAccountFragment extends DaggerFragment implements ContractAcc
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Log.d("CreateAccountFragment", "onViewCreated: CreateAccountFragment was created");
-        ButterKnife.bind(this, view);
         presenter.attachView(this);
         if (requireArguments().getLong("id") != 0) {
             long idAccount = requireArguments().getLong("id");
             compositeDisposable = presenter.getAccount(idAccount).subscribe(account -> {
 
-                        id.setText(String.format("ID %s", idAccount));
-                        first_name.setText(account.name);
-                        last_name.setText(account.surname);
+                        binding.id.setText(String.format("ID %s", idAccount));
+                binding.firstName.setText(account.name);
+                binding.lastName.setText(account.surname);
                         Glide.with(requireContext())
                                 .load(account.icon)
                                 .circleCrop()
                                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                .into(icon);
+                                .into(binding.iconAccount);
                         uri = Uri.parse(account.icon);
 
             });
         } else {
-            id.setText(String.format("ID %s", generateId()));
+            binding.id.setText(String.format("ID %s", generateId()));
         }
-        icon.setOnClickListener(v -> cropActivityResultLauncher.launch(actionPick()));
+        binding.iconAccount.setOnClickListener(v -> cropActivityResultLauncher.launch(actionPick()));
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_create_account, container, false);
+        binding = FragmentCreateAccountBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
@@ -106,11 +99,11 @@ public class CreateAccountFragment extends DaggerFragment implements ContractAcc
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_add) {
-            if (!TextUtils.isEmpty(first_name.getText().toString()) && !TextUtils.isEmpty(last_name.getText().toString())) {
+            if (!TextUtils.isEmpty(binding.firstName.getText().toString()) && !TextUtils.isEmpty(binding.lastName.getText().toString())) {
                 Account account = new Account();
-                account.id = Long.parseLong(id.getText().toString().replace("ID ", ""));
-                account.name = first_name.getText().toString();
-                account.surname = last_name.getText().toString();
+                account.id = Long.parseLong(binding.id.getText().toString().replace("ID ", ""));
+                account.name = binding.firstName.getText().toString();
+                account.surname = binding.lastName.getText().toString();
                 account.icon = String.valueOf(uri);
 
                 if (requireArguments().getLong("id") != 0) {
@@ -158,9 +151,15 @@ public class CreateAccountFragment extends DaggerFragment implements ContractAcc
                             .load(uri)
                             .circleCrop()
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
-                            .into(icon);
+                            .into(binding.iconAccount);
                 }
             });
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 
     @Override
     public void onDestroy() {
