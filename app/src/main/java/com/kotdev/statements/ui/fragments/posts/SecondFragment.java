@@ -107,7 +107,9 @@ public class SecondFragment extends DaggerFragment implements ContractPosts.View
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-        disposable.dispose();
+        if (disposable != null) {
+            disposable.dispose();
+        }
     }
 
     @Override
